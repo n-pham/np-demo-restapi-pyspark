@@ -50,3 +50,16 @@ cd <full path to your project folder>
 python3 -m pip install virtualenv
 virtualenv .
 ```
+### Others
+```
+cd <full path to your project folder>
+source bin/activate
+pip install -r requirements.txt
+```
+
+## Verify Libraries
+```
+cd <full path to your project folder>
+source bin/activate
+airflow --help
+```
