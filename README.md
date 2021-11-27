@@ -12,4 +12,18 @@ Every day the department will receive a file with the sales of the previous day.
 
 ## Technology Choices
 
-TBD
+API Framework
+|                 | Django REST                 | Flask Restful  | FastAPI (chosen)      |
+|-----------------|-----------------------------|----------------|-----------------------|
+| REST API        | Y                           | Y              | Y                     |
+| Maturity        | Y                           | Y              | Rather New            |
+| Auth            | Y                           | Y              | Y                     |
+| Use case        | Big framework               | lightweight    | Rapid new development |
+| Extras          |                             |                |                       |
+| API versioning  | Y                           | Y              | Y                     |
+| Built-in Test   | N                           | N              | Y                     |
+| Async if needed | In progress                 | Y              | Y                     |
+| Features 1      | django-rest-swagger         |                | built-in Swagger      |
+| Features 2      | Browsable API (HTML output) | representation |                       |
+| Features 3      |                             |                | built-in validation   |
+| Features 4      |                             |                | fastapi-versioning    |
