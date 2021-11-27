@@ -25,6 +25,10 @@ Data Store                  key-value, key = (product_id,date) => MongoDB
 API web server              Auth can re-use this Data Store
 ```
 
+Ideas
+* Later, Airflow FileSensor can be used to trigger Batch Processing by event instead of scheduling
+* key = (product_id,date) to support query by a product_id and a range of date
+  MongoDB _id can be composite and also indexed so query will be optimal
 
 API Framework
 |                 | Django REST                 | Flask Restful  | FastAPI (chosen)      |
