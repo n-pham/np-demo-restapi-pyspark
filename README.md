@@ -10,7 +10,21 @@ Every day the department will receive a file with the sales of the previous day.
 
 (EXTRA) - add authorization
 
-## Technology Choices
+## Architecture and Technology Choices
+
+```
+File Storage                Local for demo
+|
+↓
+Batch Processing            PySpark for distributed processing, Airflow to schedule, monitor 
+|
+↓
+Data Store                  key-value, key = (product_id,date) => MongoDB
+|
+↓
+API web server              Auth can re-use this Data Store
+```
+
 
 API Framework
 |                 | Django REST                 | Flask Restful  | FastAPI (chosen)      |
