@@ -25,6 +25,10 @@ Data Store                  key-value, key = (product_id,date) => MongoDB
 API web server              Auth can re-use this Data Store
 ```
 
+Ideas
+* Later, Airflow FileSensor can be used to trigger Batch Processing by event instead of scheduling
+* key = (product_id,date) to support query by a product_id and a range of date
+  MongoDB _id can be composite and also indexed so query will be optimal
 
 API Framework
 |                 | Django REST                 | Flask Restful  | FastAPI (chosen)      |
@@ -42,6 +46,10 @@ API Framework
 | Features 3      |                             |                | built-in validation   |
 | Features 4      |                             |                | fastapi-versioning    |
 
+## Assumptions
+
+* File name format is `YYYYMMDD_transactions.json`. The date can only be collected from this file name.
+
 ## Installing Libraries
 
 ### virtualenv
@@ -49,4 +57,29 @@ API Framework
 cd <full path to your project folder>
 python3 -m pip install virtualenv
 virtualenv .
+```
+### Others
+```
+cd <full path to your project folder>
+source bin/activate
+pip install -r requirements.txt
+
+```
+
+## Set up Airflow
+```
+cd <full path to your project folder>
+source bin/activate
+export AIRFLOW_HOME=./src/airflow
+airflow --help
+airflow db init
+airflow users  create --role Admin --username admin --email admin --firstname admin --lastname admin --password admin
+airflow webserver -p 8080
+# Open http://localhost:8080/ in web browser and log in with admin/admin
+```
+
+## Run pytest
+```
+cd <full path to your project folder>
+pytest tests
 ```
