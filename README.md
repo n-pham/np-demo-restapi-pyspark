@@ -42,6 +42,10 @@ API Framework
 | Features 3      |                             |                | built-in validation   |
 | Features 4      |                             |                | fastapi-versioning    |
 
+## Assumptions
+
+* File name format is `YYYYMMDD_transactions.json`. The date can only be collected from this file name.
+
 ## Installing Libraries
 
 ### virtualenv
@@ -55,11 +59,23 @@ virtualenv .
 cd <full path to your project folder>
 source bin/activate
 pip install -r requirements.txt
+
 ```
 
-## Verify Libraries
+## Set up Airflow
 ```
 cd <full path to your project folder>
 source bin/activate
+export AIRFLOW_HOME=./src/airflow
 airflow --help
+airflow db init
+airflow users  create --role Admin --username admin --email admin --firstname admin --lastname admin --password admin
+airflow webserver -p 8080
+# Open http://localhost:8080/ in web browser and log in with admin/admin
+```
+
+## Run pytest
+```
+cd <full path to your project folder>
+pytest tests
 ```
