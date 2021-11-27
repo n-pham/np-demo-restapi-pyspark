@@ -41,3 +41,12 @@ API Framework
 | Features 2      | Browsable API (HTML output) | representation |                       |
 | Features 3      |                             |                | built-in validation   |
 | Features 4      |                             |                | fastapi-versioning    |
+
+## Installing Libraries
+
+### virtualenv
+```
+cd <full path to your project folder>
+python3 -m pip install virtualenv
+virtualenv .
+```
