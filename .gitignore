@@ -26,6 +26,9 @@ airflow/www/static/dist
 logs/
 airflow-webserver.pid
 
+# py4j
+py4j/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

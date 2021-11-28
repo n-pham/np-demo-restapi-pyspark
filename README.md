@@ -78,6 +78,15 @@ airflow webserver -p 8080
 # Open http://localhost:8080/ in web browser and log in with admin/admin
 ```
 
+## How to run
+```
+cd <full path to your project folder>
+source bin/activate
+python setup.py develop
+airflow scheduler &> /dev/null &
+airflow webserver -p 8080 &> /dev/null &
+```
+
 ## Run pytest
 ```
 cd <full path to your project folder>
