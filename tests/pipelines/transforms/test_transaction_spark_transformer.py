@@ -11,8 +11,25 @@ TRANSACTIONS_OUTPUT_SCHEMA = StructType([
     StructField("count", LongType(), False)])
 
 def are_dfs_equal(df1, df2):
+    """
+    Returns Boolean.
+
+    Unit Test utility function to check if 2 Spark DataFrames are equal
+
+    Parameters
+    ----------
+    df1 : Spark DataFrame
+    df2 : Spark DataFrame
+
+    Returns
+    -------
+    Boolean
+    """
+
     if df1.schema != df2.schema:
         return False
+    # The 2 lists returned by collect() can have different element ordering,
+    # so Counter is needed to compare regardless of element ordering
     c1, c2 = Counter(df1.collect()), Counter(df2.collect())
     if c1 != c2:
         return False

@@ -4,24 +4,64 @@ from pyspark.sql.dataframe import DataFrame
 from pyspark.sql.functions import explode
 import logging
 
+DEFAULT_SPARK_NUMBER_OF_PARTITION = 4
+
 load_dotenv(find_dotenv())
 
-SPARK_NUMBER_OF_PARTITION = environ.get("SPARK_NUMBER_OF_PARTITION", 4)
+SPARK_NUMBER_OF_PARTITION = environ.get("SPARK_NUMBER_OF_PARTITION", DEFAULT_SPARK_NUMBER_OF_PARTITION)
 logging.info(f'SPARK_NUMBER_OF_PARTITION: {SPARK_NUMBER_OF_PARTITION}')
 
 class TransactionSparkTransformer():
+    """
+    Class to encapsulate the Transactions transformer logic
+
+    Attributes
+    ----------
+    spark_session : SparkSession
+
+    Methods
+    -------
+    transform(df: DataFrame) -> DataFrame:
+        Applies transformation the input Transactions df, does not add any Spark Action.
+    """
 
     def __init__(self, spark_session):
+        """
+        Constructs the spark session for this Transactions transformer object.
+
+        Parameters
+        ----------
+            spark_session : SparkSession
+        """
+
         self.spark_session = spark_session
 
-    def transform(self, df):
-        assert isinstance(df,DataFrame)
+    def transform(self, df: DataFrame) -> DataFrame:
+        """
+        Applies transformation the input Transactions df, does not add any Spark Action.
+
+        Parameters
+        ----------
+        df : Spark DataFrame
+            StructType([
+                StructField("id", LongType(), True),
+                tructField("products", ArrayType(LongType()), True)])
+
+        Returns
+        -------
+        Spark DataFrame
+            StructType([
+                StructField("product_id", LongType(), True),
+                StructField("count", LongType(), False)])
+        """
 
         part_df = df.repartition(SPARK_NUMBER_OF_PARTITION)
         explode_df = (part_df.select(part_df.id,explode(part_df.products))
                         .withColumnRenamed('col', 'product_id'))
         count_df = explode_df.groupBy('product_id').count()
 
+        # DataFrame.explain() does not support INFO log level
+        # code will break if this internal implementation is changed
         # logging.info(count_df._sc._jvm.PythonSQLUtils.explainString(count_df._jdf.queryExecution(), 'simple'))
 
         return count_df
