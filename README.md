@@ -78,6 +78,31 @@ airflow webserver -p 8080
 # Open http://localhost:8080/ in web browser and log in with admin/admin
 ```
 
+## Set up MongoDB server
+```
+MongoDB will be set up outside of your project folder.
+Instructions below are for MacOS:
+* brew tap mongodb/brew
+* brew install mongodb-community
+* mongod --config /usr/local/etc/mongod.conf (add `&> /dev/null &` to run in background)
+* mongosh
+* show dbs
+* use <db name>
+* db.<table name>.findOne()
+* ... <consult MongoDB official documents for more commands>
+```
+
+## Set up MongoDB drivers in project
+```
+**Manual work** for this setup, because I have not found an automatic way to install:
+* Download MongoDB Spark Connector from <https://spark-packages.org/package/mongodb/mongo-spark> (e.g. mongo-spark-connector_2.12-3.0.1.jar)
+* Put the downloaded jar in project folder/lib/pythonx.y/site-packages/pyspark/jars
+* In your project folder, run `pyspark --jars mongo-spark-connector_2.12-3.0.1.jar`
+* Spark will automatically detect and download some more driver jars but in my case they are put in `~/.ivy2/jars` and the command fails
+* Copy the jar files in `~/.ivy2/jars` to project folder/lib/pythonx.y/site-packages/pyspark/jars
+* In your project folder, run again `pyspark --jars mongo-spark-connector_2.12-3.0.1.jar`, it will succeed this time
+```
+
 ## How to run
 ```
 cd <full path to your project folder>

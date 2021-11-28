@@ -4,13 +4,6 @@ from pyspark.sql.dataframe import DataFrame
 from pyspark.sql.functions import explode
 import logging
 
-DEFAULT_SPARK_NUMBER_OF_PARTITION = 4
-
-load_dotenv(find_dotenv())
-
-SPARK_NUMBER_OF_PARTITION = environ.get("SPARK_NUMBER_OF_PARTITION", DEFAULT_SPARK_NUMBER_OF_PARTITION)
-logging.info(f'SPARK_NUMBER_OF_PARTITION: {SPARK_NUMBER_OF_PARTITION}')
-
 class TransactionSparkTransformer():
     """
     Class to encapsulate the Transactions transformer logic
@@ -18,6 +11,7 @@ class TransactionSparkTransformer():
     Attributes
     ----------
     spark_session : SparkSession
+    SPARK_NUMBER_OF_PARTITION: the number of partitions to use for repartition
 
     Methods
     -------
@@ -33,6 +27,13 @@ class TransactionSparkTransformer():
         ----------
             spark_session : SparkSession
         """
+
+        DEFAULT_SPARK_NUMBER_OF_PARTITION = 4
+
+        load_dotenv(find_dotenv())
+
+        self.SPARK_NUMBER_OF_PARTITION = environ.get("SPARK_NUMBER_OF_PARTITION", DEFAULT_SPARK_NUMBER_OF_PARTITION)
+        logging.info(f'SPARK_NUMBER_OF_PARTITION: {self.SPARK_NUMBER_OF_PARTITION}')
 
         self.spark_session = spark_session
 
@@ -55,7 +56,7 @@ class TransactionSparkTransformer():
                 StructField("count", LongType(), False)])
         """
 
-        part_df = df.repartition(SPARK_NUMBER_OF_PARTITION)
+        part_df = df.repartition(self.SPARK_NUMBER_OF_PARTITION)
         explode_df = (part_df.select(part_df.id,explode(part_df.products))
                         .withColumnRenamed('col', 'product_id'))
         count_df = explode_df.groupBy('product_id').count()
@@ -65,3 +66,6 @@ class TransactionSparkTransformer():
         # logging.info(count_df._sc._jvm.PythonSQLUtils.explainString(count_df._jdf.queryExecution(), 'simple'))
 
         return count_df
+
+if __name__ == "__main__":
+    pass
