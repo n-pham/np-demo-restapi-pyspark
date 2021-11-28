@@ -1,23 +1,25 @@
 from pipelines.transforms.transaction_spark_transformer import TransactionSparkTransformer
-from pyspark.sql.types import StructType, StructField, IntegerType, ArrayType
+from pyspark.sql.types import StructType, StructField, LongType, ArrayType
+from collections import Counter
 
 TRANSACTIONS_INPUT_SCHEMA = StructType([
-    StructField("id", IntegerType(), True),
-    StructField("products", ArrayType(IntegerType()), True)])
+    StructField("id", LongType(), True),
+    StructField("products", ArrayType(LongType()), True)])
 
 TRANSACTIONS_OUTPUT_SCHEMA = StructType([
-    StructField("product_id", IntegerType(), True),
-    StructField("count", IntegerType(), True)])
+    StructField("product_id", LongType(), True),
+    StructField("count", LongType(), False)])
 
 def are_dfs_equal(df1, df2):
     if df1.schema != df2.schema:
         return False
-    if df1.collect() != df2.collect():
+    c1, c2 = Counter(df1.collect()), Counter(df2.collect())
+    if c1 != c2:
         return False
     return True
 
 def test_transform_empty(spark_session):
-    empty_df = spark_session.createDataFrame([],'int',verifySchema=False)
+    empty_df = spark_session.createDataFrame(list(),TRANSACTIONS_INPUT_SCHEMA,verifySchema=False)
     t = TransactionSparkTransformer(spark_session)
     assert t.transform(empty_df).count() == 0
 
