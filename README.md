@@ -117,3 +117,21 @@ airflow webserver -p 8080 &> /dev/null &
 cd <full path to your project folder>
 pytest tests
 ```
+
+## Notes
+
+Performance test for MongoDB composite _id
+```
+db.testid.insertOne( {_id:{product_id:777,date:new Date("2021-11-27")},count:11})
+
+db.testid.explain().find(
+{
+    "_id" : {
+        "product_id": 777,
+        "date" : Date("2021-11-27")
+    }
+}
+)
+
+queryPlanner.winningPlan => `{ stage: 'IDHACK' }`
+```
