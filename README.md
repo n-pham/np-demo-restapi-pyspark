@@ -121,6 +121,7 @@ airflow webserver -p 8080 &> /dev/null &
 # start mongodb (`mongod --config /usr/local/etc/mongod.conf` for local)
 uvicorn apiserver.main:app --reload
 # Open http://localhost:8000/docs in web browser to run the APIs
+# The username and password are currently hard-coded as `johndoe` and `secret`
 # To have test data, either:
   * Manually trigger Airflow dag `daily_transactions_dag`
   * Wait for Airflow dag `daily_transactions_dag` to automatically based on .env DAG_SCHEDULE_INTERVAL
