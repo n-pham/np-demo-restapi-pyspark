@@ -33,6 +33,7 @@ Ideas
 * MongoDB Spark Connector was chosen to save directly from Spark into MongoDB, and it was working. But setting it up was hard - no direct set up from `pip`, maybe `Maven` can automate this setup.
 * API `GET /productsoldbyday/?product_id={product_id}&date_str={date_str=}` to get product {product_id} sold statistics by day {date_str=}, it will query MongoDB for key = (product_id,date_str)
 * API `GET /productsoldlast7days/{product_id}` to get product {product_id} sold statistics last 7 days, it will aggregate MongoDB for documents matching key in 7 (product_id,date_str) values and sum the count field
+* Auth: authorization is complete, authentication is currently hard-coded (`johndoe`/`secret`) - it will be done later
 
 
 
@@ -121,6 +122,7 @@ airflow webserver -p 8080 &> /dev/null &
 # start mongodb (`mongod --config /usr/local/etc/mongod.conf` for local)
 uvicorn apiserver.main:app --reload
 # Open http://localhost:8000/docs in web browser to run the APIs
+# The username and password are currently hard-coded as `johndoe` and `secret`
 # To have test data, either:
   * Manually trigger Airflow dag `daily_transactions_dag`
   * Wait for Airflow dag `daily_transactions_dag` to automatically based on .env DAG_SCHEDULE_INTERVAL
