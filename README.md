@@ -28,9 +28,13 @@ API web server              Auth can re-use this Data Store
 Ideas
 * Later, Airflow FileSensor can be used to trigger Batch Processing by event instead of scheduling
 * key = (product_id,date_str) to support query by a product_id and a range of date_str
-  MongoDB _id can be composite and also indexed so query will be optimal
+  MongoDB _id can be composite and also indexed so query will be optimal (see Notes section below)
 * Use date_str instead of date because Python datetime.date has no timezone but MongoDB Spark Connector assumes local timezone and convert to UTC so the dates are changed
 * MongoDB Spark Connector was chosen to save directly from Spark into MongoDB, and it was working. But setting it up was hard - no direct set up from `pip`, maybe `Maven` can automate this setup.
+* API `GET /productsoldbyday/?product_id={product_id}&date_str={date_str=}` to get product {product_id} sold statistics by day {date_str=}, it will query MongoDB for key = (product_id,date_str)
+* API `GET /productsoldlast7days/{product_id}` to get product {product_id} sold statistics last 7 days, it will aggregate MongoDB for documents matching key in 7 (product_id,date_str) values and sum the count field
+
+
 
 API Framework
 |                 | Django REST                 | Flask Restful  | FastAPI (chosen)      |
@@ -108,10 +112,19 @@ Instructions below are for MacOS:
 ## How to run
 ```
 cd <full path to your project folder>
+# edit .env file
 source bin/activate
 python setup.py develop
 airflow scheduler &> /dev/null &
 airflow webserver -p 8080 &> /dev/null &
+# Open http://localhost:8080/ in web browser and log in with admin/admin
+# start mongodb (`mongod --config /usr/local/etc/mongod.conf` for local)
+uvicorn apiserver.main:app --reload
+# Open http://localhost:8000/docs in web browser to run the APIs
+# To have test data, either:
+  * Manually trigger Airflow dag `daily_transactions_dag`
+  * Wait for Airflow dag `daily_transactions_dag` to automatically based on .env DAG_SCHEDULE_INTERVAL
+  * Manually input data into MongoDB using `mongosh` such as `db.products.insertOne( {'_id': {'product_id': 29, 'date_str': '20211127'}, 'count': 1127 } )`
 ```
 
 ## Run pytest
@@ -145,3 +158,6 @@ cd <full path to your project folder>
 source bin/activate
 python -c 'from pipelines.daily_transactions import process_daily_transactions; process_daily_transactions("<file folder>","20190207")'
 ```
+
+## References
+* <https://www.mongodb.com/developer/quickstart/python-quickstart-fastapi/>

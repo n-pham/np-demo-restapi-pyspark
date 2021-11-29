@@ -37,9 +37,11 @@ def process_daily_transactions(file_location: str, date_part: str) -> None:
 
     SPARK_NUMBER_OF_PARTITION = environ.get("SPARK_NUMBER_OF_PARTITION", DEFAULT_SPARK_NUMBER_OF_PARTITION)
     DATA_STORE_URI = environ.get("DATA_STORE_URI")
+    DATA_STORE_DATABASE = environ.get("DATA_STORE_DATABASE")
     DATA_STORE_PRODUCT_DAILY_DATA_TABLE = environ.get("DATA_STORE_PRODUCT_DAILY_DATA_TABLE")
     logging.info(f'SPARK_NUMBER_OF_PARTITION: {SPARK_NUMBER_OF_PARTITION}')
     logging.info(f'DATA_STORE_URI: {DATA_STORE_URI}')
+    logging.info(f'DATA_STORE_DATABASE: {DATA_STORE_DATABASE}')
     logging.info(f'DATA_STORE_PRODUCT_DAILY_DATA_TABLE: {DATA_STORE_PRODUCT_DAILY_DATA_TABLE}')
 
     # get spark session
@@ -50,6 +52,7 @@ def process_daily_transactions(file_location: str, date_part: str) -> None:
         .config("spark.default.parallelism",SPARK_NUMBER_OF_PARTITION)
         .config("spark.jars.packages", "org.mongodb.spark:mongo-spark-connector_2.12:3.0.1") 
         .config("spark.mongodb.output.uri", DATA_STORE_URI)
+        .config("spark.mongodb.input.database", DATA_STORE_DATABASE)
         .getOrCreate())
 
     # read file

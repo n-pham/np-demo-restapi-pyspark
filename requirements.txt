@@ -7,6 +7,7 @@ apache-airflow-providers-imap==2.0.1
 apache-airflow-providers-sqlite==2.0.1
 apispec==3.3.2
 argcomplete==1.12.3
+asgiref==3.4.1
 attrs==20.3.0
 Babel==2.9.1
 blinker==1.4
@@ -26,6 +27,7 @@ dill==0.3.2
 dnspython==2.1.0
 docutils==0.16
 email-validator==1.1.3
+fastapi==0.70.0
 findspark==1.4.2
 Flask==1.1.2
 Flask-AppBuilder==3.3.4
@@ -40,6 +42,7 @@ graphviz==0.18
 gunicorn==20.1.0
 h11==0.12.0
 httpcore==0.13.7
+httptools==0.2.0
 httpx==0.20.0
 idna==3.3
 inflection==0.5.1
@@ -58,6 +61,8 @@ marshmallow==3.14.0
 marshmallow-enum==1.5.1
 marshmallow-oneofschema==3.0.1
 marshmallow-sqlalchemy==0.26.1
+motor==2.5.1
+-e git+ssh://git@github.com/n-pham/np-demo-restapi-pyspark.git@b6dd43fc550c21d63a046efb5fcfb0120c18b2f9#egg=np_demo_restapi_pyspark
 openapi-schema-validator==0.1.5
 openapi-spec-validator==0.3.1
 packaging==21.2
@@ -68,8 +73,10 @@ psutil==5.8.0
 py==1.11.0
 py4j==0.10.9.2
 pycparser==2.21
+pydantic==1.8.2
 Pygments==2.10.0
 PyJWT==1.7.1
+pymongo==3.12.1
 pyparsing==2.4.7
 pyrsistent==0.18.0
 pyspark==3.2.0
@@ -93,13 +100,19 @@ sniffio==1.2.0
 SQLAlchemy==1.3.24
 SQLAlchemy-JSONField==1.0.0
 SQLAlchemy-Utils==0.37.9
+starlette==0.16.0
 swagger-ui-bundle==0.0.9
 tabulate==0.8.9
 tenacity==8.0.1
 termcolor==1.1.0
 text-unidecode==1.3
 toml==0.10.2
+typing_extensions==4.0.0
 unicodecsv==0.14.1
 urllib3==1.26.7
+uvicorn==0.15.0
+uvloop==0.16.0
+watchgod==0.7
+websockets==10.1
 Werkzeug==1.0.1
 WTForms==2.3.3
