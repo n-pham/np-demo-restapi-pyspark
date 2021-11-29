@@ -10,6 +10,7 @@ argcomplete==1.12.3
 asgiref==3.4.1
 attrs==20.3.0
 Babel==2.9.1
+bcrypt==3.2.0
 blinker==1.4
 cattrs==1.5.0
 certifi==2020.12.5
@@ -26,6 +27,7 @@ defusedxml==0.7.1
 dill==0.3.2
 dnspython==2.1.0
 docutils==0.16
+ecdsa==0.17.0
 email-validator==1.1.3
 fastapi==0.70.0
 findspark==1.4.2
@@ -54,6 +56,7 @@ Jinja2==2.11.3
 jsonschema==3.2.0
 lazy-object-proxy==1.4.3
 lockfile==0.12.2
+makefun==1.12.1
 Mako==1.1.5
 Markdown==3.3.4
 MarkupSafe==1.1.1
@@ -62,20 +65,22 @@ marshmallow-enum==1.5.1
 marshmallow-oneofschema==3.0.1
 marshmallow-sqlalchemy==0.26.1
 motor==2.5.1
--e git+ssh://git@github.com/n-pham/np-demo-restapi-pyspark.git@b6dd43fc550c21d63a046efb5fcfb0120c18b2f9#egg=np_demo_restapi_pyspark
+-e git+ssh://git@github.com/n-pham/np-demo-restapi-pyspark.git@927ca6fb1c988093b3939d08bbd5ad3ee62f42ad#egg=np_demo_restapi_pyspark
 openapi-schema-validator==0.1.5
 openapi-spec-validator==0.3.1
 packaging==21.2
+passlib==1.7.4
 pendulum==2.1.2
 pluggy==1.0.0
 prison==0.2.1
 psutil==5.8.0
 py==1.11.0
 py4j==0.10.9.2
+pyasn1==0.4.8
 pycparser==2.21
 pydantic==1.8.2
 Pygments==2.10.0
-PyJWT==1.7.1
+PyJWT==2.3.0
 pymongo==3.12.1
 pyparsing==2.4.7
 pyrsistent==0.18.0
@@ -85,6 +90,8 @@ pytest-spark==0.6.0
 python-daemon==2.3.0
 python-dateutil==2.8.2
 python-dotenv==0.19.2
+python-jose==3.3.0
+python-multipart==0.0.5
 python-nvd3==0.15.0
 python-slugify==4.0.1
 python3-openid==3.2.0
@@ -94,6 +101,7 @@ PyYAML==5.4.1
 requests==2.26.0
 rfc3986==1.5.0
 rich==10.13.0
+rsa==4.8
 setproctitle==1.2.2
 six==1.16.0
 sniffio==1.2.0
