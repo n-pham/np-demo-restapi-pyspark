@@ -1,7 +1,7 @@
 from dotenv import load_dotenv, find_dotenv
 from os import environ
 from pyspark.sql.dataframe import DataFrame
-from pyspark.sql.functions import explode
+from pyspark.sql.functions import explode, struct, lit
 import logging
 
 class TransactionSparkTransformer():
@@ -37,7 +37,7 @@ class TransactionSparkTransformer():
 
         self.spark_session = spark_session
 
-    def transform(self, df: DataFrame) -> DataFrame:
+    def transform(self, df: DataFrame, transaction_date: str) -> DataFrame:
         """
         Applies transformation the input Transactions df, does not add any Spark Action.
 
@@ -47,6 +47,7 @@ class TransactionSparkTransformer():
             StructType([
                 StructField("id", LongType(), True),
                 tructField("products", ArrayType(LongType()), True)])
+        transaction_date: str (YYYYMMDD)
 
         Returns
         -------
@@ -60,12 +61,19 @@ class TransactionSparkTransformer():
         explode_df = (part_df.select(part_df.id,explode(part_df.products))
                         .withColumnRenamed('col', 'product_id'))
         count_df = explode_df.groupBy('product_id').count()
+        # change to this structure {"_id": {product_id,date}, "count": count}
+        struct_df = count_df.select(
+                                struct(
+                                    'product_id',
+                                    lit(transaction_date).alias('date_str')
+                                ).alias('_id'),
+                                'count')
 
         # DataFrame.explain() does not support INFO log level
         # code will break if this internal implementation is changed
         # logging.info(count_df._sc._jvm.PythonSQLUtils.explainString(count_df._jdf.queryExecution(), 'simple'))
 
-        return count_df
+        return struct_df
 
 if __name__ == "__main__":
     pass

@@ -27,8 +27,10 @@ API web server              Auth can re-use this Data Store
 
 Ideas
 * Later, Airflow FileSensor can be used to trigger Batch Processing by event instead of scheduling
-* key = (product_id,date) to support query by a product_id and a range of date
+* key = (product_id,date_str) to support query by a product_id and a range of date_str
   MongoDB _id can be composite and also indexed so query will be optimal
+* Use date_str instead of date because Python datetime.date has no timezone but MongoDB Spark Connector assumes local timezone and convert to UTC so the dates are changed
+* MongoDB Spark Connector was chosen to save directly from Spark into MongoDB, and it was working. But setting it up was hard - no direct set up from `pip`, maybe `Maven` can automate this setup.
 
 API Framework
 |                 | Django REST                 | Flask Restful  | FastAPI (chosen)      |
@@ -96,8 +98,8 @@ Instructions below are for MacOS:
 ```
 **Manual work** for this setup, because I have not found an automatic way to install:
 * Download MongoDB Spark Connector from <https://spark-packages.org/package/mongodb/mongo-spark> (e.g. mongo-spark-connector_2.12-3.0.1.jar)
-* Put the downloaded jar in project folder/lib/pythonx.y/site-packages/pyspark/jars
-* In your project folder, run `pyspark --jars mongo-spark-connector_2.12-3.0.1.jar`
+* Put the downloaded jar in <project folder>/lib/pythonx.y/site-packages/pyspark/jars
+* In your project folder, run `pyspark --jars lib/pythonx.y/site-packages/pyspark/jars/mongo-spark-connector_2.12-3.0.1.jar`
 * Spark will automatically detect and download some more driver jars but in my case they are put in `~/.ivy2/jars` and the command fails
 * Copy the jar files in `~/.ivy2/jars` to project folder/lib/pythonx.y/site-packages/pyspark/jars
 * In your project folder, run again `pyspark --jars mongo-spark-connector_2.12-3.0.1.jar`, it will succeed this time
@@ -115,6 +117,7 @@ airflow webserver -p 8080 &> /dev/null &
 ## Run pytest
 ```
 cd <full path to your project folder>
+source bin/activate
 pytest tests
 ```
 
@@ -134,4 +137,11 @@ db.testid.explain().find(
 )
 
 queryPlanner.winningPlan => `{ stage: 'IDHACK' }`
+```
+
+To debug process_daily_transactions function
+```
+cd <full path to your project folder>
+source bin/activate
+python -c 'from pipelines.daily_transactions import process_daily_transactions; process_daily_transactions("<file folder>","20190207")'
 ```
