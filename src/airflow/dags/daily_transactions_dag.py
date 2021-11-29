@@ -25,11 +25,14 @@ default_args = {
 with DAG(
     dag_id='daily_transactions_dag',
     default_args=default_args,
+    # TODO Later, use FileSensor to trigger instead of scheduling
     schedule_interval=DAG_SCHEDULE_INTERVAL) as dag:
+
     process_task = PythonOperator(
             task_id='process_daily_transactions_task',
             python_callable=process_daily_transactions,
             op_kwargs={'file_location': FILE_LOCATION,'date_part': FILE_DATE})
+
     stop_task = DummyOperator(task_id= "stop")
 
 process_task >> stop_task
